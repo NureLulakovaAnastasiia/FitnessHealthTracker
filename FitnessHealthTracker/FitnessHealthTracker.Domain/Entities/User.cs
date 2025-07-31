@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FitnessHealthTracker.Domain.Entities
 {
-    public class User
+    public class User: IdentityUser
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -19,7 +20,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public ICollection<UserAim>? Aims { get; set; }
         public ICollection<Meal>? OwnMeals { get; set; }
         public ICollection<MealHistory>? Meals { get; set; }
-        public ICollection<WeightParameter> Weights { get; set; }
+        public ICollection<HealthParameter> Weights { get; set; }
 
         public User()
         {

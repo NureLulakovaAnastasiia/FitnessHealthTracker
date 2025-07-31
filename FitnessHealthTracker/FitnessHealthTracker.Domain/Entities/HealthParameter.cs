@@ -6,9 +6,20 @@ using System.Threading.Tasks;
 
 namespace FitnessHealthTracker.Domain.Entities
 {
-    public class WeightParameter: BaseModel
+    public class HealthParameter : BaseModel
     {
         public float Value { get; set; }
         public DateTime DateTime { get; set; }
+        public HealthParameterType Type { get; set; }
+
+        
+    }
+
+    public enum HealthParameterType
+    {
+        Weight,
+        Height,
+        Pulse,
+        BloodPressure
     }
 }
