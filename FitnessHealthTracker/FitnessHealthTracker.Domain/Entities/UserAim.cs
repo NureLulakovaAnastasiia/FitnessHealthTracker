@@ -14,6 +14,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public float? AimValue { get; set; }
         public bool IsAchieved { get; set; } = false;
 
+        public UserAim()  { }
         public UserAim(Aim aim, DateTime? endDate, float? aimValue)
         {
             Aim = aim;

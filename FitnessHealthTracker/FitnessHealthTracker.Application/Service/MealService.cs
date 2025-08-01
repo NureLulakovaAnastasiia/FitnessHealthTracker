@@ -1,4 +1,5 @@
-﻿using FitnessHealthTracker.Application.IService;
+﻿using FitnessHealthTracker.Application.IRepository;
+using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace FitnessHealthTracker.Application.Service
 {
+
     public class MealService : IMealService
     {
+        private readonly IMealRepository _mealRepository;
+
+        public MealService(IMealRepository mealRepository)
+        {
+            _mealRepository = mealRepository;
+        }
+
         public bool AddMealHistory(MealHistory history)
         {
             throw new NotImplementedException();

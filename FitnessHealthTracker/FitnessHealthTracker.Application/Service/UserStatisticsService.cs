@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FitnessHealthTracker.Application.Service
 {
-    internal class UserStatisticsService : IUserStatisticsService
+    public class UserStatisticsService : IUserStatisticsService
     {
         public CaloriesPerMealDto GetTotalCaloriesPerActivityDate(DateTime startDate, DateTime? endDate)
         {

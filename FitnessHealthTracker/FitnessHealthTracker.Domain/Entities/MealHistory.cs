@@ -12,9 +12,10 @@ namespace FitnessHealthTracker.Domain.Entities
         public DateTime Date { get; set; }
         public int WeightInGrams { get; set; }
 
-        public MealHistory(Meal meal, int weight)
+        public MealHistory() { }
+        public MealHistory(int weight)
         {
-            Meal = meal;
+            Meal = new Meal();
             WeightInGrams = weight;
         }
     }

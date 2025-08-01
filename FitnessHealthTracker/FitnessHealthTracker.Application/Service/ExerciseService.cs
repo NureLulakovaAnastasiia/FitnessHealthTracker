@@ -1,4 +1,5 @@
-﻿using FitnessHealthTracker.Application.IService;
+﻿using FitnessHealthTracker.Application.IRepository;
+using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,18 @@ namespace FitnessHealthTracker.Application.Service
 {
     public class ExerciseService : IExerciseService
     {
+        private readonly IExerciseRepository _exerciseRepository;
+
+        public ExerciseService(IExerciseRepository exerciseRepository)
+        {
+            _exerciseRepository = exerciseRepository;
+        }
         public bool AddExercise(Exercise exercise)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddUserExercise(UserExercise exercise)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +37,17 @@ namespace FitnessHealthTracker.Application.Service
             throw new NotImplementedException();
         }
 
+        public bool RemoveUserExercise(int exerciseId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool UpdateExercise(Exercise exercise)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateUserExercise(UserExercise exercise)
         {
             throw new NotImplementedException();
         }

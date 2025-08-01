@@ -11,6 +11,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public string Name { get; set; }
         public MealNutrients Nutrients { get; set; }
 
+        public Meal() { }
         public Meal(int id, string name, MealNutrients nutrients)
         {
             Id = id;

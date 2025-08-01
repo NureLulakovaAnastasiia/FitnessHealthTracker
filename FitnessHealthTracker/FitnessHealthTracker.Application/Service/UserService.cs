@@ -1,4 +1,5 @@
-﻿using FitnessHealthTracker.Application.IService;
+﻿using FitnessHealthTracker.Application.IRepository;
+using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,18 @@ namespace FitnessHealthTracker.Application.Service
 {
     public class UserService : IUserService
     {
+        private readonly IUserRepository _userRepository;
+
+        public UserService(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
+        public ICollection<Meal> GetUserMeals()
+        {
+            throw new NotImplementedException();
+        }
+
         public UserParameters GetUserParameters(string userId)
         {
             throw new NotImplementedException();

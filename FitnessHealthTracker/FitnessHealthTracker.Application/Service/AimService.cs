@@ -1,4 +1,5 @@
-﻿using FitnessHealthTracker.Application.IService;
+﻿using FitnessHealthTracker.Application.IRepository;
+using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,12 @@ namespace FitnessHealthTracker.Application.Service
 {
     public class AimService : IAimService
     {
+        private readonly IAimRepository _aimRepository;
+
+        public AimService(IAimRepository aimRepository)
+        {
+            _aimRepository = aimRepository;
+        }
         public bool AddAim(Aim aim)
         {
             throw new NotImplementedException();
@@ -36,6 +43,11 @@ namespace FitnessHealthTracker.Application.Service
         }
 
         public ICollection<UserAim> GetAllUserAims(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserAim GetLatestUserAim(int userId)
         {
             throw new NotImplementedException();
         }

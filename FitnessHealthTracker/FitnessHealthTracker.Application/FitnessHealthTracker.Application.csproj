@@ -10,8 +10,4 @@
     <ProjectReference Include="..\FitnessHealthTracker.Domain\FitnessHealthTracker.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IRepository\" />
-  </ItemGroup>
-
 </Project>
