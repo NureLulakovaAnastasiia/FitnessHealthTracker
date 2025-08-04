@@ -8,6 +8,8 @@ namespace FitnessHealthTracker.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -48,6 +50,6 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, res.Error);
         }
 
-        
+       
     }
 }

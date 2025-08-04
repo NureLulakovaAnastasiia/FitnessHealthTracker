@@ -1,5 +1,7 @@
+using FitnessHealthTracker.Application;
 using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
+using FitnessHealthTracker.Application.Mappings;
 using FitnessHealthTracker.Application.Service;
 using FitnessHealthTracker.Domain.Entities;
 using FitnessHealthTracker.Infrastructure;
@@ -7,6 +9,7 @@ using FitnessHealthTracker.Infrastructure.Data;
 using FitnessHealthTracker.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -18,14 +21,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IAimService, AimService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IExerciseService, ExerciseService>();
-builder.Services.AddScoped<IMealService, MealService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserStatisticsService, UserStatisticsService>();
+
 builder.Services.AddInfrastructuresService(builder.Configuration);
+builder.Services.AddApplicationService(builder.Configuration);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme =
@@ -40,6 +39,8 @@ builder.Services.AddAuthentication(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters()
         {
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
@@ -96,10 +97,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.MapControllers();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
 
 app.Run();

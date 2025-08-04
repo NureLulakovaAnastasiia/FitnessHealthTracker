@@ -13,6 +13,7 @@ namespace FitnessHealthTracker.Domain
         public static string WrongPasswordMessage = "Password is wrong";
         public static string LoginErrorMessage = "Login Error";
         public static string TokenErrorMessage = "Token cannot be created";
+        public static string NoDataFoundMessage = "No data found";
 
     }
 }

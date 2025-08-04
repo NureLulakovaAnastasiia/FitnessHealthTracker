@@ -1,4 +1,6 @@
-﻿using FitnessHealthTracker.Domain.Entities;
+﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
+using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,10 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IUserService
     {
-        public UserParameters GetUserParameters(string userId);
+        public Task<Result<UserParameters>> GetUserParameters(string userId);
         public bool UpdateUserParameters(UserParameters userParameters);
         public ICollection<Meal> GetUserMeals();
+        public Task<Result<GetUserDto>> GetUser(string userId);
 
     }
 }

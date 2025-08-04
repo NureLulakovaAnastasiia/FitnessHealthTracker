@@ -1,5 +1,8 @@
-﻿using FitnessHealthTracker.Application.IRepository;
+﻿using AutoMapper;
+using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
+using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,10 +15,35 @@ namespace FitnessHealthTracker.Application.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<Result<GetUserDto>> GetUser(string userId)
+        {
+            var result = new Result<GetUserDto>();
+
+            try
+            {
+                var user = await _userRepository.GetUserById(userId);
+                if (user != null)
+                {
+                    result.Value = _mapper.Map<GetUserDto>(user);
+                }
+                else
+                {
+                    result.Error = Errors.NoDataFoundMessage;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Error = ex.Message;
+            }
+            return result;
         }
 
         public ICollection<Meal> GetUserMeals()
@@ -23,9 +51,10 @@ namespace FitnessHealthTracker.Application.Service
             throw new NotImplementedException();
         }
 
-        public UserParameters GetUserParameters(string userId)
+        public async Task<Result<UserParameters>> GetUserParameters(string userId)
         {
-            throw new NotImplementedException();
+            var result = await _userRepository.GetUserParameters(userId);
+            return result;
         }
 
         public bool UpdateUserParameters(UserParameters userParameters)

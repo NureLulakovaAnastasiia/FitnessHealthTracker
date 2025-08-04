@@ -1,6 +1,9 @@
 ﻿using FitnessHealthTracker.Application.IRepository;
+using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using FitnessHealthTracker.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +15,12 @@ namespace FitnessHealthTracker.Infrastructure.Repository
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDBContext _dbContext;
 
-        public UserRepository(UserManager<User> userManager)
+        public UserRepository(UserManager<User> userManager, ApplicationDBContext dBContext)
         {
             _userManager = userManager;
+            _dbContext = dBContext;
         }
         public async Task<User?> GetUserByEmail(string userEmail)
         {
@@ -26,6 +31,35 @@ namespace FitnessHealthTracker.Infrastructure.Repository
         {
             return await _userManager.FindByIdAsync(id);
 
+        }
+
+        public async Task<Result<UserParameters>> GetUserParameters(string userId)
+        {
+            var result = new Result<UserParameters>();
+
+            try
+            {
+                var user = await _dbContext.Users
+                    .Where(u => u.Id == userId)
+                    .Include(u => u.Parameters)
+                    .FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    result.Error = Errors.NoDataFoundMessage;
+                    return result;
+                }
+
+                result.Value = user.Parameters;
+            } catch (Exception ex) 
+            {
+                result.Error = ex.Message;
+            }
+            return result;
+        }
+
+        public Task<bool> UpdateUserParameters(UserParameters userParameters)
+        {
+            throw new NotImplementedException();
         }
     }
 }
