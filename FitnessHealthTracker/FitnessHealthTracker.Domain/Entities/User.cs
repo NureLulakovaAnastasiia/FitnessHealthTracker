@@ -23,11 +23,12 @@ namespace FitnessHealthTracker.Domain.Entities
         {
         }
 
-        public User(string FirstName, string LastName, string Email, string Password)
+        public User(string FirstName, string LastName, string Email)
         {
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.Email = Email;
+            UserName = Email;
             Parameters = new UserParameters();
         }
 

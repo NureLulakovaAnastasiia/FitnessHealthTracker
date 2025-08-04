@@ -1,4 +1,5 @@
 ﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IAuthService
     {
-        public void Register(NewUserDto userDto);
-        public void LogIn(UserLoginDto userLoginDto);
-        public void ChangePassword(string oldPassword, string newPassword);
-        public bool DeleteAccount(string userId);
+        public Task<string?> Register(NewUserDto userDto);
+        public Task<Result<string>> LogIn(UserLoginDto userLoginDto);
+        public Task<Result<bool>> ChangePassword(string oldPassword, string newPassword);
+        public Task<Result<bool>> DeleteAccount(string userId);
 
     }
 }

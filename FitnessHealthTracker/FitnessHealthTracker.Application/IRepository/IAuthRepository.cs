@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FitnessHealthTracker.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace FitnessHealthTracker.Application.IRepository
 {
     public interface IAuthRepository
     {
+        public Task<Result<bool>> Register(string email, string password, string firstName, string lastName);
+        public Task<Result<bool>> LogIn(string email, string password);
 
     }
 }
