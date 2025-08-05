@@ -1,4 +1,6 @@
-﻿using FitnessHealthTracker.Domain.Entities;
+﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
+using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +11,15 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IAimService
     {
-        public ICollection<Aim> GetAllAim();
-        public bool AddAim(Aim aim);
-        public bool DeleteAim(int aimId);
-        public bool UpdateAim(Aim aim);
-        public bool AddUserAim(UserAim userAim);
-        public bool DeleteUserAim(int userAimId);
-        public bool UpdateUserAim(UserAim userAim);
-        public ICollection<UserAim> GetAllUserAims(string userId);
-        public bool MarkUserAimAchieved(int userAimId);
-        public UserAim GetLatestUserAim(int userId);
+        public Task<Result<ICollection<Aim>>> GetAllAims();
+        public Result<bool> AddAim(Aim aim);
+        public Task<Result<bool>> DeleteAim(int aimId);
+        public Result<bool> UpdateAim(Aim aim);
+        public Result<bool> AddUserAim(UserAimDto userAim);
+        public Task<Result<bool>> DeleteUserAim(int userAimId);
+        public Result<bool> UpdateUserAim(UserAimDto userAim);
+        public Task<Result<ICollection<UserAim>>> GetAllUserAims(string userId);
+        public Task<Result<bool>> MarkUserAimAchieved(int userAimId);
+        public Task<Result<UserAim>> GetLatestUserAim(string userId);
     }
 }

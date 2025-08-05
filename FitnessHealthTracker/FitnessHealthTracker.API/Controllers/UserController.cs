@@ -20,7 +20,7 @@ namespace FitnessHealthTracker.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{userId}/parameters")]
+        [HttpGet("parameters/{userId}")]
         public async Task<IActionResult> GetUserParameters(string userId)
         {
             var parameters = await _userService.GetUserParameters(userId);
@@ -31,8 +31,8 @@ namespace FitnessHealthTracker.API.Controllers
             return NotFound(parameters.Error);
         }
 
-        [HttpPost("{userId}/parameters")]
-        public async Task<IActionResult> UpdateUserParameters(UserParameters parameters)
+        [HttpPut("parameters")]
+        public async Task<IActionResult> UpdateUserParameters([FromBody] UserParameters parameters)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
@@ -57,8 +57,8 @@ namespace FitnessHealthTracker.API.Controllers
             return NotFound(userData.Error);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateUserData(GetUserDto userDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserData([FromBody] GetUserDto userDto)
         {
             if (!ModelState.IsValid)
             {

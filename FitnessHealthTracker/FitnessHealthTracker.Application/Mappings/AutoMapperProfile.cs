@@ -14,6 +14,7 @@ namespace FitnessHealthTracker.Application.Mappings
         public AutoMapperProfile()
         {
             CreateMap<User, GetUserDto>();
+            CreateMap<UserAimDto, UserAim>();
         }
     }
 }

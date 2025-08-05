@@ -4,23 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FitnessHealthTracker.Domain.Entities
+namespace FitnessHealthTracker.Application.DTOs
 {
-    public class UserAim: BaseModel
+    public class UserAimDto
     {
+        public int Id { get; set; }
         public int AimId { get; set; }
-        public Aim? Aim { get; set; }
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
         public DateTime EndDate { get; set; }
         public float? AimValue { get; set; }
+        public string UserId { get; set; }
         public bool IsAchieved { get; set; } = false;
-
-        public UserAim()  { }
-        public UserAim(Aim aim, DateTime? endDate, float? aimValue)
-        {
-            Aim = aim;
-            EndDate = endDate == null ? DateTime.UtcNow.AddMonths(1) : endDate.Value;
-        }
     }
-
 }

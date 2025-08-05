@@ -1,9 +1,13 @@
-﻿using FitnessHealthTracker.Application.IRepository;
+﻿using AutoMapper;
+using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
+using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,59 +16,159 @@ namespace FitnessHealthTracker.Application.Service
     public class AimService : IAimService
     {
         private readonly IAimRepository _aimRepository;
+        private readonly IMapper _mapper;
 
-        public AimService(IAimRepository aimRepository)
+        public AimService(IAimRepository aimRepository, IMapper mapper)
         {
             _aimRepository = aimRepository;
+            _mapper = mapper;
         }
-        public bool AddAim(Aim aim)
+        public Result<bool> AddAim(Aim aim)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool AddUserAim(UserAim userAim)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteAim(int aimId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteUserAim(int userAimId)
-        {
-            throw new NotImplementedException();
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                res.Value = _aimRepository.AddAim(aim);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
 
-        public ICollection<Aim> GetAllAim()
+        public Result<bool> AddUserAim(UserAimDto userAim)
         {
-            throw new NotImplementedException();
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                var aimToAdd = _mapper.Map<UserAim>(userAim);
+                res.Value = _aimRepository.AddUserAim(aimToAdd, userAim.UserId);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
 
-        public ICollection<UserAim> GetAllUserAims(string userId)
+        public async Task<Result<bool>> DeleteAim(int aimId)
         {
-            throw new NotImplementedException();
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                res.Value = await _aimRepository.DeleteAim(aimId);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
 
-        public UserAim GetLatestUserAim(int userId)
+        public async Task<Result<bool>> DeleteUserAim(int userAimId)
         {
-            throw new NotImplementedException();
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                res.Value = await _aimRepository.DeleteUserAim(userAimId);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
 
-        public bool MarkUserAimAchieved(int userAimId)
+        public async Task<Result<ICollection<Aim>>> GetAllAims()
         {
-            throw new NotImplementedException();
+            var res = new Result<ICollection<Aim>>();
+            try
+            {
+                res.Value = await _aimRepository.GetAllAims();
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
+
         }
 
-        public bool UpdateAim(Aim aim)
+        public async Task<Result<ICollection<UserAim>>> GetAllUserAims(string userId)
         {
-            throw new NotImplementedException();
+            var res = new Result<ICollection<UserAim>>();
+            try
+            {
+                res.Value = await _aimRepository.GetAllUserAims(userId);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
 
-        public bool UpdateUserAim(UserAim userAim)
+        public async Task<Result<UserAim>> GetLatestUserAim(string userId)
         {
-            throw new NotImplementedException();
+            var res = new Result<UserAim>();
+            try
+            {
+                var allAims = await _aimRepository.GetAllUserAims(userId);
+                if (allAims.Any())
+                {
+                    res.Value = allAims.MaxBy(x => x.StartDate);
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
+
+        }
+
+        public async Task<Result<bool>> MarkUserAimAchieved(int userAimId)
+        {
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                res.Value = await _aimRepository.MarkUserAimAchieved(userAimId);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
+        }
+
+        public Result<bool> UpdateAim(Aim aim)
+        {
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                res.Value = _aimRepository.UpdateAim(aim);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
+        }
+
+        public Result<bool> UpdateUserAim(UserAimDto userAim)
+        {
+            var res = new Result<bool>() { Value = false };
+            try
+            {
+                var aimToUpdate = _mapper.Map<UserAim>(userAim);
+                res.Value = _aimRepository.UpdateUserAim(aimToUpdate);
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+            return res;
         }
     }
 }
