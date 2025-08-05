@@ -13,7 +13,8 @@ namespace FitnessHealthTracker.Application.IRepository
         public Task<User?> GetUserById(string id);
         public Task<User?> GetUserByEmail(string userEmail);
         public Task<Result<UserParameters>> GetUserParameters(string userId);
-        public Task<bool> UpdateUserParameters(UserParameters userParameters);
+        public bool UpdateUserParameters(UserParameters userParameters);
 
+        public bool UpdateUser(User user);
     }
 }

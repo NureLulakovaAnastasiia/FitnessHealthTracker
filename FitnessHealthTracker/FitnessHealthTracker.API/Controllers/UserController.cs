@@ -1,7 +1,10 @@
-﻿using FitnessHealthTracker.Application.IService;
+﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Application.IService;
+using FitnessHealthTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessHealthTracker.API.Controllers
 {
@@ -28,6 +31,21 @@ namespace FitnessHealthTracker.API.Controllers
             return NotFound(parameters.Error);
         }
 
+        [HttpPost("{userId}/parameters")]
+        public async Task<IActionResult> UpdateUserParameters(UserParameters parameters)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            var userData = User.Claims;
+            var updateRes = await _userService.UpdateUserParameters(parameters, userData.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+            if (updateRes.IsSuccess && updateRes.Value)
+            {
+                return Ok();
+            }
+            return StatusCode(500, updateRes.Error);
+        }
+
         [HttpGet("{userId}")]
         public async Task<IActionResult>  GetUserData(string userId)
         {
@@ -37,6 +55,21 @@ namespace FitnessHealthTracker.API.Controllers
                 return Ok(userData.Value);
             }
             return NotFound(userData.Error);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserData(GetUserDto userDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var updateRes = await _userService.UpdateUser(userDto);
+            if (updateRes.IsSuccess && updateRes.Value)
+            {
+                return Ok();
+            }
+            return StatusCode(500, updateRes.Error);
         }
     }
 }

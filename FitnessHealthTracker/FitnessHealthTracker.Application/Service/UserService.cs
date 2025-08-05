@@ -57,9 +57,52 @@ namespace FitnessHealthTracker.Application.Service
             return result;
         }
 
-        public bool UpdateUserParameters(UserParameters userParameters)
+        public async Task<Result<bool>> UpdateUser(GetUserDto user)
         {
-            throw new NotImplementedException();
+            var res = new Result<bool>() { Value = false };
+
+            try
+            {
+                var userToUpdate = await _userRepository.GetUserById(user.Id);
+                if (userToUpdate != null)
+                {
+                    userToUpdate.Email = user.Email;
+                    userToUpdate.FirstName = user.FirstName;
+                    userToUpdate.LastName = user.LastName;
+                    res.Value = _userRepository.UpdateUser(userToUpdate);
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Error = ex.Message;
+            }
+
+            return res;
+        }
+
+        public async Task<Result<bool>> UpdateUserParameters(UserParameters userParameters, string userId)
+        {
+            var result = new Result<bool>() { Value = false };
+            try
+            {
+                var user = await _userRepository.GetUserById(userId);
+                if (user != null)
+                {
+                    //check if user updates his own parameters
+                    var existingParameters = await _userRepository.GetUserParameters(userId);
+                    if (existingParameters.IsSuccess && existingParameters.Value.Id == userParameters.Id)
+                    {
+                        result.Value = _userRepository.UpdateUserParameters(userParameters);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Error = ex.Message;
+            }
+
+            return result;
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,6 +43,7 @@ namespace FitnessHealthTracker.Infrastructure.Repository
                 var user = await _dbContext.Users
                     .Where(u => u.Id == userId)
                     .Include(u => u.Parameters)
+                    .AsNoTracking()
                     .FirstOrDefaultAsync();
                 if (user == null)
                 {
@@ -57,9 +59,17 @@ namespace FitnessHealthTracker.Infrastructure.Repository
             return result;
         }
 
-        public Task<bool> UpdateUserParameters(UserParameters userParameters)
+        public bool UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            _dbContext.Update(user);
+            return _dbContext.SaveChanges() != 0;
+
+        }
+
+        public bool UpdateUserParameters(UserParameters userParameters)
+        {
+            var res =  _dbContext.Update(userParameters);
+            return  _dbContext.SaveChanges() != 0;
         }
     }
 }
