@@ -40,7 +40,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Aims");
+                    b.ToTable("Aims", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.Exercise", b =>
@@ -57,7 +57,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.HealthParameter", b =>
@@ -84,7 +84,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("HealthParameters");
+                    b.ToTable("HealthParameters", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.Meal", b =>
@@ -111,7 +111,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.MealHistory", b =>
@@ -140,7 +140,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MealHistories");
+                    b.ToTable("MealHistories", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.MealNutrients", b =>
@@ -165,7 +165,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MealNutrients");
+                    b.ToTable("MealNutrients", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.User", b =>
@@ -278,7 +278,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAims");
+                    b.ToTable("UserAims", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.UserExercise", b =>
@@ -310,7 +310,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserExercises");
+                    b.ToTable("UserExercises", (string)null);
                 });
 
             modelBuilder.Entity("FitnessHealthTracker.Domain.Entities.UserParameters", b =>
@@ -326,7 +326,7 @@ namespace FitnessHealthTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserParameters");
+                    b.ToTable("UserParameters", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

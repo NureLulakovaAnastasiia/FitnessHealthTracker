@@ -15,6 +15,7 @@ namespace FitnessHealthTracker.Application.Mappings
         {
             CreateMap<User, GetUserDto>();
             CreateMap<UserAimDto, UserAim>();
+            CreateMap<UserExerciseDto, UserExercise>();
         }
     }
 }

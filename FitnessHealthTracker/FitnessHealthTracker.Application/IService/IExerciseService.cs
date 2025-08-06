@@ -1,4 +1,6 @@
-﻿using FitnessHealthTracker.Domain.Entities;
+﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
+using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +11,15 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IExerciseService
     {
-        public ICollection<Exercise> GetAvailableExercises();
-        public bool AddExercise(Exercise exercise);
-        public bool RemoveExercise(int exerciseId);
-        public bool UpdateExercise(Exercise exercise);
-        public bool AddUserExercise(UserExercise exercise);
-        public bool UpdateUserExercise(UserExercise exercise);
-        public bool RemoveUserExercise(int exerciseId);
+        public Task<Result<ICollection<Exercise>>> GetAvailableExercises();
+        public Result<bool> AddExercise(Exercise exercise);
+        public Task<Result<bool>> RemoveExercise(int exerciseId);
+        public Result<bool> UpdateExercise(Exercise exercise);
+        public Result<bool> AddUserExercise(UserExerciseDto exercise);
+        public Result<bool> UpdateUserExercise(UserExerciseDto exercise);
+        public Task<Result<bool>> RemoveUserExercise(int exerciseId);
+        public Task<Result<ICollection<UserExercise>>> GetAllUserExercises(string userId);
+
 
     }
 }
