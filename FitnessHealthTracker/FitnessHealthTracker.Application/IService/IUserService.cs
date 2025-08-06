@@ -13,7 +13,6 @@ namespace FitnessHealthTracker.Application.IService
     {
         public Task<Result<UserParameters>> GetUserParameters(string userId);
         public Task<Result<bool>> UpdateUserParameters(UserParameters userParameters, string userId);
-        public ICollection<Meal> GetUserMeals(); //which user added
         public Task<Result<GetUserDto>> GetUser(string userId);
         public Task<Result<bool>> UpdateUser(GetUserDto user);
 

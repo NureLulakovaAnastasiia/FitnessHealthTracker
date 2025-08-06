@@ -9,7 +9,9 @@ namespace FitnessHealthTracker.Domain.Entities
     public class Meal: BaseModel
     {
         public string Name { get; set; }
-        public MealNutrients Nutrients { get; set; }
+        public int NutrientsId { get; set; }
+        public string? UserId { get; set; }
+        public MealNutrients? Nutrients { get; set; }
 
         public Meal() { }
         public Meal(int id, string name, MealNutrients nutrients)

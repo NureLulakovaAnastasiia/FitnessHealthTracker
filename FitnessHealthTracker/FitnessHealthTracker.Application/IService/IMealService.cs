@@ -1,4 +1,6 @@
-﻿using FitnessHealthTracker.Domain.Entities;
+﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
+using FitnessHealthTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +11,17 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IMealService
     {
-        public ICollection<Meal> GetMeals();
-        public bool AddNewMeal(Meal meal);
-        public bool UpdateMeal(Meal meal);
-        public bool UpdateMealNutrients(int mealId, MealNutrients nutrients);
-        public bool DeleteMeal(int mealId);
-        public ICollection<MealHistory> GetMealsHistory(string userId);
-        public bool AddMealHistory(MealHistory history);
-        public bool UpdateMealHistory(MealHistory history);
-        public bool DeleteMealHistory(int historyId);
+        public Task<Result<ICollection<Meal>>> GetMeals();
+        public Result<bool> AddNewMeal(Meal meal);
+        public Result<bool> UpdateMeal(UpdateMealDto mealDto);
+        public Result<bool> UpdateMealNutrients(int mealId, MealNutrients nutrients);
+        public Task<Result<bool>> DeleteMeal(int mealId);
+        public Task<Result<ICollection<MealHistory>>> GetMealsHistory(string userId);
+        public Result<bool> AddMealHistory(MealHistoryDto history);
+        public Result<bool> UpdateMealHistory(MealHistoryDto history);
+        public Task<Result<bool>> DeleteMealHistory(int historyId);
+        public Task<Result<ICollection<Meal>>> GetUserMeals(string userId); //which user added
+
 
     }
 }
