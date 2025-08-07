@@ -2,7 +2,10 @@
 using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
+using FitnessHealthTracker.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,21 +19,15 @@ namespace FitnessHealthTracker.Application.Service
         private readonly IAuthRepository _authRepository;
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IAuthRepository authRepository, ITokenService tokenService, IUserRepository userRepository)
+
+        public AuthService(IAuthRepository authRepository, ITokenService tokenService, IUserRepository userRepository, ILogger<AuthService> logger)
         {
             _authRepository = authRepository;
             _tokenService = tokenService;
             _userRepository = userRepository;
-        }
-        public Task<Result<bool>> ChangePassword(string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<bool>> DeleteAccount(string userId)
-        {
-            throw new NotImplementedException();
+            _logger = logger;
         }
 
         public async Task<Result<string>> LogIn(UserLoginDto userLoginDto)
@@ -44,6 +41,7 @@ namespace FitnessHealthTracker.Application.Service
                 if (loginResult == null || !loginResult.IsSuccess)
                 {
                     result.Error = loginResult == null ? Errors.LoginErrorMessage : loginResult.Error;
+                    Log.Error("Error during login by user '{Email}'", userLoginDto.Email);
                     return result;
                 }
 
@@ -51,6 +49,8 @@ namespace FitnessHealthTracker.Application.Service
                 if (user == null)
                 {
                     result.Error = Errors.LoginErrorMessage;
+                    Log.Error("Error during login by user '{Email}'", userLoginDto.Email);
+
                 }
                 else
                 {
@@ -58,6 +58,8 @@ namespace FitnessHealthTracker.Application.Service
                     if (token == null)
                     {
                         result.Error = Errors.LoginErrorMessage;
+                        Log.Error("Error during login by user '{Id}' in generating token", user.Id);
+
                     }
                     else
                     {
@@ -68,6 +70,9 @@ namespace FitnessHealthTracker.Application.Service
             catch (Exception ex)
             {
                 result.Error = ex.Message;
+                Log.ForContext("Email", userLoginDto.Email)
+                    .Error(ex, "Error during login");
+
             }
 
             return result;
@@ -78,8 +83,12 @@ namespace FitnessHealthTracker.Application.Service
             var registerResult = await _authRepository.Register(userDto.Email, userDto.Password, userDto.FirstName, userDto.LastName);
             if (registerResult.IsSuccess)
             {
+                _logger.LogInformation("New user '{Email}' was created", userDto.Email);
                 return null;
+
             }
+            Log.Error("Error during adding new user '{Email}'", userDto.Email);
+
             return registerResult.Error;
         }
     }

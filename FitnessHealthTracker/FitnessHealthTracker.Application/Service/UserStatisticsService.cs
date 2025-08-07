@@ -3,6 +3,8 @@ using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,13 @@ namespace FitnessHealthTracker.Application.Service
     public class UserStatisticsService : IUserStatisticsService
     {
         private readonly IUserStatisticsRepository _userStatisticsRepository;
+        private readonly ILogger<UserStatisticsService> _logger;
 
-        public UserStatisticsService(IUserStatisticsRepository userStatisticsRepository)
+
+        public UserStatisticsService(IUserStatisticsRepository userStatisticsRepository, ILogger<UserStatisticsService> logger)
         {
             _userStatisticsRepository = userStatisticsRepository;
+            _logger = logger;
         }
 
         public async Task<Result<ICollection<CaloriesPerActivityDto>>> GetTotalCaloriesPerActivityDate(DateTime startDate, DateTime? endDate, string userId)
@@ -44,6 +49,9 @@ namespace FitnessHealthTracker.Application.Service
             catch (Exception ex)
             {
                 result.Error = ex.Message;
+                Log.ForContext("Id", userId)
+                    .Error(ex, "Error during getting calories per activity");
+
             }
             return result;
         }
@@ -57,6 +65,7 @@ namespace FitnessHealthTracker.Application.Service
                 if (!countedMeals.IsSuccess)
                 {
                     result.Error = countedMeals.Error;
+                    _logger.LogError("Getting calories per meal for user '{userId}'", userId);
                     return result;
                 }
 
@@ -64,6 +73,7 @@ namespace FitnessHealthTracker.Application.Service
                 if (!countedActivity.IsSuccess)
                 {
                     result.Error = countedActivity.Error;
+                    _logger.LogError("Getting calories per activity for user '{userId}'", userId);
                     return result;
                 }
 
@@ -92,6 +102,9 @@ namespace FitnessHealthTracker.Application.Service
             catch (Exception ex)
             {
                 result.Error += ex.Message;
+                Log.ForContext("Id", userId)
+                    .Error(ex, "Error during getting calories per day");
+
             }
 
             return result;
@@ -123,6 +136,9 @@ namespace FitnessHealthTracker.Application.Service
             catch (Exception ex)
             {
                 result.Error = ex.Message;
+                Log.ForContext("Id", userId)
+                    .Error(ex, "Error during getting calories per meal");
+
             }
             return result;
         }

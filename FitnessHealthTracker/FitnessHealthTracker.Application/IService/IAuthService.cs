@@ -12,8 +12,6 @@ namespace FitnessHealthTracker.Application.IService
     {
         public Task<string?> Register(NewUserDto userDto);
         public Task<Result<string>> LogIn(UserLoginDto userLoginDto);
-        public Task<Result<bool>> ChangePassword(string oldPassword, string newPassword);
-        public Task<Result<bool>> DeleteAccount(string userId);
 
     }
 }

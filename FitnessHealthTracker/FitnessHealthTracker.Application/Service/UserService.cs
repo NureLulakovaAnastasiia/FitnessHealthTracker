@@ -4,6 +4,8 @@ using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +18,14 @@ namespace FitnessHealthTracker.Application.Service
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+
+        public UserService(IUserRepository userRepository, IMapper mapper, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Result<GetUserDto>> GetUser(string userId)
@@ -37,23 +42,25 @@ namespace FitnessHealthTracker.Application.Service
                 else
                 {
                     result.Error = Errors.NoDataFoundMessage;
+                    Log.Error("Error during getting user '{userId}'", userId);
+
                 }
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("Id", userId)
+                .Error(ex, "Error during getting user");
+
+
             }
             return result;
-        }
-
-        public ICollection<Meal> GetUserMeals()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Result<UserParameters>> GetUserParameters(string userId)
         {
             var result = await _userRepository.GetUserParameters(userId);
+
             return result;
         }
 
@@ -70,11 +77,16 @@ namespace FitnessHealthTracker.Application.Service
                     userToUpdate.FirstName = user.FirstName;
                     userToUpdate.LastName = user.LastName;
                     res.Value = _userRepository.UpdateUser(userToUpdate);
+                    _logger.LogInformation("User '{Id}' was updated",user.Id);
+
                 }
             }
             catch (Exception ex)
             {
                 res.Error = ex.Message;
+                Log.ForContext("Id", user.Id)
+                    .Error(ex, "Error during updating user");
+
             }
 
             return res;
@@ -93,6 +105,8 @@ namespace FitnessHealthTracker.Application.Service
                     if (existingParameters.IsSuccess && existingParameters.Value.Id == userParameters.Id)
                     {
                         result.Value = _userRepository.UpdateUserParameters(userParameters);
+                        _logger.LogInformation("User '{Id}' parameters was updated", user.Id);
+
                     }
 
                 }
@@ -100,6 +114,9 @@ namespace FitnessHealthTracker.Application.Service
             catch (Exception ex)
             {
                 result.Error = ex.Message;
+                Log.ForContext("Id", userId)
+                .Error(ex, "Error during updating user");
+
             }
 
             return result;

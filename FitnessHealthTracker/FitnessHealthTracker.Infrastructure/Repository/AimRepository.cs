@@ -2,7 +2,9 @@
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
 using FitnessHealthTracker.Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace FitnessHealthTracker.Infrastructure.Repository
     public class AimRepository : IAimRepository
     {
         private readonly ApplicationDBContext _dbContext;
-
+ 
         public AimRepository(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;

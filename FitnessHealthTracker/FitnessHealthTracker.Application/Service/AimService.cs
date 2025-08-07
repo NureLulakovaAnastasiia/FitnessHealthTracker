@@ -4,6 +4,9 @@ using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +20,13 @@ namespace FitnessHealthTracker.Application.Service
     {
         private readonly IAimRepository _aimRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<AimService> _logger;
 
-        public AimService(IAimRepository aimRepository, IMapper mapper)
+        public AimService(IAimRepository aimRepository, IMapper mapper, ILogger<AimService> logger)
         {
             _aimRepository = aimRepository;
             _mapper = mapper;
+            _logger = logger;
         }
         public Result<bool> AddAim(Aim aim)
         {
@@ -29,10 +34,13 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = _aimRepository.AddAim(aim);
+                _logger.LogInformation("Aim with name '{Name}' was created", aim.Name);
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.AddingErrorMessage;
+                Log.Error(ex, "Error during adding aim");
+
             }
             return res;
         }
@@ -44,10 +52,15 @@ namespace FitnessHealthTracker.Application.Service
             {
                 var aimToAdd = _mapper.Map<UserAim>(userAim);
                 res.Value = _aimRepository.AddUserAim(aimToAdd, userAim.UserId);
+                _logger.LogInformation("Aim for user '{UserId}' was created", userAim.UserId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.AddingErrorMessage;
+                Log.ForContext("UserId", userAim.UserId)
+                    .Error(ex, "Error during adding user aim");
+
             }
             return res;
         }
@@ -58,10 +71,14 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _aimRepository.DeleteAim(aimId);
+                _logger.LogInformation("Aim with id '{aimId}' was deleted", aimId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.DeletingErrorMessage;
+                Log.Error(ex, "Error during deleting aim");
+
             }
             return res;
         }
@@ -72,10 +89,13 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _aimRepository.DeleteUserAim(userAimId);
+                _logger.LogInformation("User aim '{userAimId}' was deleted", userAimId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.DeletingErrorMessage;
+                Log.Error(ex, "Error during deleting aim");
             }
             return res;
         }
@@ -89,7 +109,7 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
             }
             return res;
 
@@ -101,10 +121,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _aimRepository.GetAllUserAims(userId);
+                _logger.LogInformation("Aims for user '{userId}' were gotten", userId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                    .Error(ex, "Error during getting user aims");
+
             }
             return res;
         }
@@ -118,11 +143,15 @@ namespace FitnessHealthTracker.Application.Service
                 if (allAims.Any())
                 {
                     res.Value = allAims.MaxBy(x => x.StartDate);
+
                 }
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                    .Error(ex, "Error during getting latest user aim");
+
             }
             return res;
 
@@ -134,10 +163,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _aimRepository.MarkUserAimAchieved(userAimId);
+                _logger.LogInformation("Aim '{userAimId}' status was changed to achieved", userAimId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("UserAimId", userAimId)
+                    .Error(ex, "Error during updating user aim status to achieved");
+
             }
             return res;
         }
@@ -148,10 +182,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = _aimRepository.UpdateAim(aim);
+                _logger.LogInformation("Aim '{Id}' was updated", aim.Id);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("Id", aim.Id)
+                    .Error(ex, "Error during updating aim");
+
             }
             return res;
         }
@@ -163,10 +202,15 @@ namespace FitnessHealthTracker.Application.Service
             {
                 var aimToUpdate = _mapper.Map<UserAim>(userAim);
                 res.Value = _aimRepository.UpdateUserAim(aimToUpdate);
+                _logger.LogInformation("User aim '{Id}' was updated", userAim.Id);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("Id", userAim.Id)
+                    .Error(ex, "Error during updating aim");
+
             }
             return res;
         }

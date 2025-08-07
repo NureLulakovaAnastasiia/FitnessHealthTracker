@@ -2,8 +2,11 @@
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -14,10 +17,13 @@ namespace FitnessHealthTracker.Application.Service
     public class HealthParameterService : IHealthParametersService
     {
         private readonly IHealthParametersRepository _healthParametersRepository;
+        private readonly ILogger<HealthParameterService> _logger;
 
-        public HealthParameterService(IHealthParametersRepository healthParametersRepository)
+
+        public HealthParameterService(IHealthParametersRepository healthParametersRepository, ILogger<HealthParameterService> logger)
         {
             _healthParametersRepository = healthParametersRepository;
+            _logger = logger;
         }
         public Result<bool> AddParameter(HealthParameter parameter)
         {
@@ -25,10 +31,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = _healthParametersRepository.AddParameter(parameter);
+                _logger.LogInformation("Health parameter for user '{UserId}' was added", parameter.UserId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.AddingErrorMessage;
+                Log.ForContext("UserId", parameter.UserId)
+                .Error(ex, "Error during adding health parameter");
+
             }
             return res;
 
@@ -43,7 +54,11 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                    .ForContext("Type", type.ToString())
+                    .Error(ex, "Error during getting health parameters");
+
             }
             return res;
         }
@@ -57,7 +72,10 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                    .Error(ex, "Error during getting health parameters");
+
             }
             return res;
         }
@@ -68,10 +86,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _healthParametersRepository.RemoveParameter(parameterId);
+                _logger.LogInformation("Health Parameter '{parameterId}' was deleted", parameterId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.DeletingErrorMessage;
+                Log.ForContext("Id", parameterId)
+                    .Error(ex, "Error during deleting health parameter");
+
             }
             return res;
 

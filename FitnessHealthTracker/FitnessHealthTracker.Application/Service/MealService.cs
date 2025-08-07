@@ -4,9 +4,12 @@ using FitnessHealthTracker.Application.IRepository;
 using FitnessHealthTracker.Application.IService;
 using FitnessHealthTracker.Domain;
 using FitnessHealthTracker.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,12 +20,15 @@ namespace FitnessHealthTracker.Application.Service
     {
         private readonly IMealRepository _mealRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<MealService> _logger;
 
 
-        public MealService(IMealRepository mealRepository, IMapper mapper)
+
+        public MealService(IMealRepository mealRepository, IMapper mapper, ILogger<MealService> logger)
         {
             _mealRepository = mealRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public Result<bool> AddMealHistory(MealHistoryDto history)
@@ -32,10 +38,15 @@ namespace FitnessHealthTracker.Application.Service
             {
                 var historyToAdd = _mapper.Map<MealHistory>(history);
                 res.Value = _mealRepository.AddMealHistory(historyToAdd, history.UserId);
+                _logger.LogInformation("Meal history for user '{UserId}' was added", history.UserId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.AddingErrorMessage;
+                Log.ForContext("UserId", history.UserId)
+                    .Error(ex, "Error during adding meal history");
+
             }
             return res;
         }
@@ -46,10 +57,14 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = _mealRepository.AddMeal(meal);
+                _logger.LogInformation("Meal '{Name}' was added", meal.Name);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.AddingErrorMessage;
+                Log.Error(ex, "Error during adding meal");
+
             }
             return res;
         }
@@ -60,10 +75,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _mealRepository.DeleteMeal(mealId);
+                _logger.LogInformation("Meal '{mealId}' was deleted", mealId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.DeletingErrorMessage;
+                Log.ForContext("Id", mealId)
+                    .Error(ex, "Error during deleting meal");
+
             }
             return res;
 
@@ -75,10 +95,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = await _mealRepository.DeleteMealHistory(historyId);
+                _logger.LogInformation("Meal history '{historyId}' was deleted", historyId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.DeletingErrorMessage;
+                Log.ForContext("Id", historyId)
+                    .Error(ex, "Error during deleting meal history");
+
             }
             return res;
         }
@@ -92,7 +117,9 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.Error(ex, "Error during getting meals");
+
             }
             return res;
         }
@@ -106,7 +133,10 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                    .Error(ex, "Error during getting meals history");
+
             }
             return res;
         }
@@ -124,7 +154,10 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.NoDataFoundMessage;
+                Log.ForContext("UserId", userId)
+                .Error(ex, "Error during getting user meals");
+
             }
             return res;
 
@@ -137,10 +170,15 @@ namespace FitnessHealthTracker.Application.Service
             {
                 var mealToUpdate = _mapper.Map<Meal>(mealDto);
                 res.Value = _mealRepository.UpdateMeal(mealToUpdate);
+                _logger.LogInformation("Meal '{Id}' was updated", mealDto.Id);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("Id", mealDto.Id)
+                    .Error(ex, "Error during updating meal");
+
             }
             return res;
         }
@@ -152,10 +190,15 @@ namespace FitnessHealthTracker.Application.Service
             {
                 var historyToUpdate = _mapper.Map<MealHistory>(history);
                 res.Value = _mealRepository.UpdateMealHistory(historyToUpdate, history.UserId);
+                _logger.LogInformation("Meal history '{Id}' was updated", history.Id);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("Id", history.Id)
+                    .Error(ex, "Error during updating meal history");
+
             }
             return res;
         }
@@ -166,10 +209,15 @@ namespace FitnessHealthTracker.Application.Service
             try
             {
                 res.Value = _mealRepository.UpdateMealNutrients(nutrients, mealId);
+                _logger.LogInformation("Meal nutrients '{Id}' for meal '{mealId}' were updated", nutrients.Id, mealId);
+
             }
             catch (Exception ex)
             {
-                res.Error = ex.Message;
+                res.Error = Errors.UpdatingErrorMessage;
+                Log.ForContext("Id", nutrients.Id)
+                    .Error(ex, "Error during updating meal nutrients");
+
             }
             return res;
         }
