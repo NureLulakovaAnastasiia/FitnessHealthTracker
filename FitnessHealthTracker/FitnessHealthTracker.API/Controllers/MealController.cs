@@ -19,6 +19,11 @@ namespace FitnessHealthTracker.API.Controllers
             _mealService = mealService;
         }
 
+        /// <summary>
+        /// Отримання списку всіх доступних страв (системних)
+        /// </summary>
+        /// <returns>Список страв</returns>
+
         [HttpGet]
         public async Task<IActionResult> GetMeals()
         {
@@ -29,6 +34,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Отримання списку всіх страв, створених користувачем
+        /// </summary>
+        /// <returns>Список страв</returns>
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserMeals(string userId)
@@ -41,6 +51,10 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Додавання нової страви
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
 
         [HttpPost]
         public IActionResult AddMeal([FromBody] Meal meal)
@@ -53,6 +67,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Оновлення страви
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
+
         [HttpPut]
         public IActionResult UpdateMeal([FromBody] UpdateMealDto mealDto)
         {
@@ -63,6 +82,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Оновлення поживних речовин страви
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPatch("{mealId}/nutrients")]
         public IActionResult UpdateMealNutrients(int mealId, [FromBody] MealNutrients nutrients)
@@ -75,6 +99,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Видалення страви
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
+
         [HttpDelete("{mealId}")]
         public async Task<IActionResult> DeleteMeal(int mealId)
         {
@@ -85,6 +114,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Отримання списку всіх прийомів їжі користувачем
+        /// </summary>
+        /// <returns>Список прийомів їжі</returns>
 
         [HttpGet("history/{userId}")]
         public async Task<IActionResult> GetMealsHistory(string userId)
@@ -97,6 +131,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Додавання нового прийому їжі (страви) користувачем
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
+
         [HttpPost("history")]
         public IActionResult AddMealHistory([FromBody] MealHistoryDto history)
         {
@@ -108,6 +147,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Оновлення прийому їжі
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
+
         [HttpPut("history")]
         public IActionResult UpdateMealHistory([FromBody] MealHistoryDto history)
         {
@@ -118,6 +162,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Видалення прийому їжі
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
 
         [HttpDelete("history/{historyId}")]
         public async Task<IActionResult> DeleteMealHistory(int historyId)

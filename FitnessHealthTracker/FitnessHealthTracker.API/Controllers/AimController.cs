@@ -18,7 +18,10 @@ namespace FitnessHealthTracker.API.Controllers
         {
             _aimService = aimService;
         }
-
+        /// <summary>
+        /// Отримати список всіх цілей (системних)
+        /// </summary>
+        /// <returns>Список цілей</returns>
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAims()
         {
@@ -29,6 +32,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Додавання нової мети
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
 
         [HttpPost]
         public IActionResult AddAim([FromBody] Aim aim)
@@ -41,6 +49,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Видалення мети
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
+
         [HttpDelete("{aimId}")]
         public async Task<IActionResult> DeleteAim(int aimId)
         {
@@ -51,6 +64,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Оновлення мети
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPut]
         public IActionResult UpdateAim([FromBody] Aim aim)
@@ -63,6 +81,12 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+
+        /// <summary>
+        /// Додавання нової мети користувача 
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
+
         [HttpPost("user")]
         public IActionResult AddUserAim([FromBody] UserAimDto userAim)
         {
@@ -73,6 +97,12 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+
+        /// <summary>
+        /// Видалення мети користувача
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
 
         [HttpDelete("user/{userAimId}")]
         public async Task<IActionResult> DeleteUserAim(int userAimId)
@@ -85,6 +115,12 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+
+        /// <summary>
+        /// Оновлення мети користувача
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
+
         [HttpPut("user")]
         public IActionResult UpdateUserAim([FromBody] UserAimDto userAim)
         {
@@ -95,6 +131,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Отримання список всіх цілей користувача
+        /// </summary>
+        /// <returns>Список цілей</returns>
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetAllUserAims(string userId)
@@ -107,6 +148,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Оновлення статусу мети на "досягнуто"
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
+
         [HttpPatch("user/achieve/{userAimId}")]
         public async Task<IActionResult> MarkUserAimAchieved(int userAimId)
         {
@@ -117,6 +163,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Отримання останньою за датою мети користувача
+        /// </summary>
+        /// <returns>Мета користувача</returns>
 
         [HttpGet("user/latest/{userId}")]
         public async Task<IActionResult> GetLatestUserAim(string userId)

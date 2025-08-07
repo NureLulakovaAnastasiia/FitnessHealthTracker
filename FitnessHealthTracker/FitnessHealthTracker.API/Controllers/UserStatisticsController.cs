@@ -17,6 +17,11 @@ namespace FitnessHealthTracker.API.Controllers
             _userStatisticsService = userStatisticsService;
         }
 
+        /// <summary>
+        /// Отримання даних про прийоми їжі з розрахунком калорійності за певну дату або інтервал часу
+        /// </summary>
+        /// <returns>Список прийомів їжі</returns>
+
         [HttpGet("TotalCaloriesPerMealDate")]
         public async Task<IActionResult> GetTotalCaloriesPerMealDate([FromQuery] DateTime start,
             [FromQuery] DateTime? end,
@@ -29,6 +34,10 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, res.Error);
         }
+        /// <summary>
+        /// Отримання даних про тренування з розрахунком калорійності за певну дату або інтервал часу
+        /// </summary>
+        /// <returns>Список прийомів їжі</returns>
 
         [HttpGet("TotalCaloriesPerActivityDate")]
         public async Task<IActionResult> GetTotalCaloriesPerActivityDate([FromQuery] DateTime start,
@@ -42,6 +51,10 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, res.Error);
         }
+        /// <summary>
+        /// Отримання даних про прийоми їжі та тренування з розрахунком калорійності за певну дату або інтервал часу
+        /// </summary>
+        /// <returns>Список прийомів їжі</returns>
 
         [HttpGet("TotalCaloriesPerDate")]
         public async Task<IActionResult> GetTotalCaloriesPerDayDate([FromQuery] DateTime start,

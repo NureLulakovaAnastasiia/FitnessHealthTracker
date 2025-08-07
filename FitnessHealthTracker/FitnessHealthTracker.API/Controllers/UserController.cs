@@ -20,6 +20,11 @@ namespace FitnessHealthTracker.API.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Отримання параметрів користувача
+        /// </summary>
+        /// <returns>Параметри користувача</returns>
+
         [HttpGet("parameters/{userId}")]
         public async Task<IActionResult> GetUserParameters(string userId)
         {
@@ -30,6 +35,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return NotFound(parameters.Error);
         }
+
+        /// <summary>
+        /// Оновлення параметрів користувача
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPut("parameters")]
         public async Task<IActionResult> UpdateUserParameters([FromBody] UserParameters parameters)
@@ -46,6 +56,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, updateRes.Error);
         }
 
+        /// <summary>
+        /// Отримання даних користувача
+        /// </summary>
+        /// <returns>Дані користувача</returns>
+
         [HttpGet("{userId}")]
         public async Task<IActionResult>  GetUserData(string userId)
         {
@@ -56,6 +71,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return NotFound(userData.Error);
         }
+
+        /// <summary>
+        /// Оновлення даних користувача
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPut]
         public async Task<IActionResult> UpdateUserData([FromBody] GetUserDto userDto)

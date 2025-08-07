@@ -19,6 +19,10 @@ namespace FitnessHealthTracker.API.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// Реєстрація нового користувача
+        /// </summary>
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(NewUserDto userDto)
         {
@@ -33,6 +37,13 @@ namespace FitnessHealthTracker.API.Controllers
 
             return StatusCode(500, res);
         }
+
+
+
+        /// <summary>
+        /// Авторизація користувача
+        /// </summary>
+        /// <returns>Токен доступу</returns>
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userDto)

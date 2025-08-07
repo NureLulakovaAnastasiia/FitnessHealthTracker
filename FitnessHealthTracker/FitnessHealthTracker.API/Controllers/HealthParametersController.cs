@@ -18,6 +18,12 @@ namespace FitnessHealthTracker.API.Controllers
             _parameterService = parameterService;
         }
 
+
+        /// <summary>
+        /// Додавання нової показника здоров'я
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
+
         [HttpPost]
         public IActionResult AddParameter([FromBody] HealthParameter parameter)
         {
@@ -28,6 +34,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Видалення показника здоров'я
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
 
         [HttpDelete("{parameterId}")]
         public async Task<IActionResult> RemoveParameter(int parameterId)
@@ -40,6 +51,12 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+
+        /// <summary>
+        /// Отримання списку всіх показників користувача за типом показника
+        /// </summary>
+        /// <returns>Список показників</returns>
+
         [HttpGet("type")]
         public async Task<IActionResult> GetParametersByType([FromQuery] HealthParameterType type, [FromQuery] string userId)
         {
@@ -50,6 +67,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Отримання списку всіх показників користувача за певний інтервал часу
+        /// </summary>
+        /// <returns>Список показників</returns>
 
         [HttpGet("interval")]
         public async Task<IActionResult> GetParametersInTimeInterval(

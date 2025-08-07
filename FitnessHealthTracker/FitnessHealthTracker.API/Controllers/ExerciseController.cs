@@ -19,6 +19,12 @@ namespace FitnessHealthTracker.API.Controllers
             _exerciseService = exerciseService;
         }
 
+
+        /// <summary>
+        /// Отримання список всіх доступних вправ (системних)
+        /// </summary>
+        /// <returns>Список вправ</returns>
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAvailableExercises()
         {
@@ -29,6 +35,10 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+        /// <summary>
+        /// Додавання нової вправи
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
 
         [HttpPost]
         public IActionResult AddExercise([FromBody] Exercise exercise)
@@ -41,6 +51,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Видалення вправи
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
+
         [HttpDelete("{exerciseId}")]
         public async Task<IActionResult> RemoveExercise(int exerciseId)
         {
@@ -51,6 +66,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Оновлення вправи
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPut]
         public IActionResult UpdateExercise([FromBody] Exercise exercise)
@@ -63,6 +83,12 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+
+        /// <summary>
+        /// Додавання нової вправи користувача (з тривалістю та витраченими калоріями)
+        /// </summary>
+        /// <returns>Результат додавання (true/false)</returns>
+
         [HttpPost("user")]
         public IActionResult AddUserExercise([FromBody] UserExerciseDto exercise)
         {
@@ -73,6 +99,11 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+        /// <summary>
+        /// Оновлення вправи користувача
+        /// </summary>
+        /// <returns>Результат оновлення (true/false)</returns>
 
         [HttpPut("user")]
         public IActionResult UpdateUserExercise([FromBody] UserExerciseDto exercise)
@@ -85,6 +116,11 @@ namespace FitnessHealthTracker.API.Controllers
             return StatusCode(500, result.Error);
         }
 
+        /// <summary>
+        /// Видалення вправи користувача
+        /// </summary>
+        /// <returns>Результат видалення (true/false)</returns>
+
         [HttpDelete("user/{exerciseId}")]
         public async Task<IActionResult> RemoveUserExercise(int exerciseId)
         {
@@ -95,6 +131,12 @@ namespace FitnessHealthTracker.API.Controllers
             }
             return StatusCode(500, result.Error);
         }
+
+
+        /// <summary>
+        /// Отримання список всіх вправ користувача
+        /// </summary>
+        /// <returns>Список вправ</returns>
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetAllUserExercises(string userId)
