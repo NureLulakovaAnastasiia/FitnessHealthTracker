@@ -8,9 +8,10 @@ namespace FitnessHealthTracker.Application.DTOs
 {
     public abstract class ObjectWithCalories
     {
-        public string Id { get; set; }
+        public int Id { get; set; } //mealHistory or UserExercise Id
         public string Name { get; set; }
         public int CaloriesValue { get; set; }
+        public DateTime Date { get; set; }
 
     }
 }

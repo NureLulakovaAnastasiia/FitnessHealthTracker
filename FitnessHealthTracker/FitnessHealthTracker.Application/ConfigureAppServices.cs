@@ -26,7 +26,9 @@ namespace FitnessHealthTracker.Application
             services.AddScoped<IMealService, MealService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IHealthParametersService, HealthParameterService>();
             services.AddScoped<IUserStatisticsService, UserStatisticsService>();
+
             return services;
         }
     }

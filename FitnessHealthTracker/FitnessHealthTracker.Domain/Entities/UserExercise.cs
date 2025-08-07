@@ -13,5 +13,6 @@ namespace FitnessHealthTracker.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Calories { get; set; }
+        public string UserId { get; set; }
     }
 }

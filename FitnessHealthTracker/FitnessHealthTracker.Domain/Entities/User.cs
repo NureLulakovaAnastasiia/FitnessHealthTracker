@@ -17,7 +17,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public ICollection<UserAim>? Aims { get; set; }
         public ICollection<Meal>? OwnMeals { get; set; }
         public ICollection<MealHistory>? Meals { get; set; }
-        public ICollection<HealthParameter>? Weights { get; set; }
+        public ICollection<HealthParameter>? HealthParameters { get; set; }
 
         public User()
         {

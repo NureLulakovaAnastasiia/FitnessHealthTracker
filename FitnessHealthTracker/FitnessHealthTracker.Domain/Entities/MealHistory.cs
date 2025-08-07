@@ -12,7 +12,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public Meal? Meal { get; set; }
         public DateTime Date { get; set; }
         public int WeightInGrams { get; set; }
-
+        public string UserId { get; set; }
         public MealHistory() { }
         public MealHistory(int weight)
         {

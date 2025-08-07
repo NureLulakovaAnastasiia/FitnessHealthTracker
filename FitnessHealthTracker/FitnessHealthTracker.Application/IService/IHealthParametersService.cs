@@ -10,8 +10,11 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IHealthParametersService
     {
-        public bool AddParameter(HealthParameter parameter);
-        public bool RemoveParameter(HealthParameter parameter);
-        public ICollection<HealthParameter> GetParametersByType(HealthParameterType type, string userId);
+        public Result<bool> AddParameter(HealthParameter parameter);
+        public Task<Result<bool>> RemoveParameter(int parameterId);
+        public Task<Result<ICollection<HealthParameter>>> GetParametersByType(HealthParameterType type, string userId);
+        public Task<Result<ICollection<HealthParameter>?>> GetParametersInTimeInterval(DateTime? start, DateTime? end, string userId);
+
     }
 }
+

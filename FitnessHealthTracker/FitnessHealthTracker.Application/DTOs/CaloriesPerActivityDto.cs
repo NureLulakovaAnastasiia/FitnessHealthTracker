@@ -8,5 +8,6 @@ namespace FitnessHealthTracker.Application.DTOs
 {
     public class CaloriesPerActivityDto:ObjectWithCalories
     {
+        public double TimeInMinutes {  get; set; }
     }
 }

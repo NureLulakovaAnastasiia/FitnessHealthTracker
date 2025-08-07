@@ -1,4 +1,5 @@
 ﻿using FitnessHealthTracker.Application.DTOs;
+using FitnessHealthTracker.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace FitnessHealthTracker.Application.IService
 {
     public interface IUserStatisticsService
     {
-        public CaloriesPerDayDto GetTotalCaloriesPerDate(DateTime startDate, DateTime? endDate);
-        public CaloriesPerMealDto GetTotalCaloriesPerMealDate(DateTime startDate, DateTime? endDate);
-        public CaloriesPerMealDto GetTotalCaloriesPerActivityDate(DateTime startDate, DateTime? endDate);
+        public Task<Result<ICollection<CaloriesPerDayDto>>> GetTotalCaloriesPerDate(DateTime startDate, DateTime? endDate, string userId);
+        public Task<Result<ICollection<CaloriesPerMealDto>>> GetTotalCaloriesPerMealDate(DateTime startDate, DateTime? endDate, string userId);
+        public Task<Result<ICollection<CaloriesPerActivityDto>>> GetTotalCaloriesPerActivityDate(DateTime startDate, DateTime? endDate, string userId);
 
     }
 }

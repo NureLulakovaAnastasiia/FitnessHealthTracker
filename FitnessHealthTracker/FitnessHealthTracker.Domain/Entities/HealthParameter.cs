@@ -11,7 +11,7 @@ namespace FitnessHealthTracker.Domain.Entities
         public float Value { get; set; }
         public DateTime DateTime { get; set; }
         public HealthParameterType Type { get; set; }
-
+        public string UserId { get; set; }
         
     }
 

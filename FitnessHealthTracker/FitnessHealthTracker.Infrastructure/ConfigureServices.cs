@@ -33,6 +33,8 @@ namespace FitnessHealthTracker.Infrastructure
             services.AddScoped<IExerciseRepository, ExerciseRepository>();
             services.AddScoped<IMealRepository, MealRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IHealthParametersRepository, HealthParametersRepository>();
+            services.AddScoped<IUserStatisticsRepository, UserStatisticsRepository>();
 
             return services;
         }
