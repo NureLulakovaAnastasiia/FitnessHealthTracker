@@ -69,7 +69,7 @@ namespace FitnessHealthTracker.Application.Service
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.Error = Errors.LoginErrorMessage;
                 Log.ForContext("Email", userLoginDto.Email)
                     .Error(ex, "Error during login");
 
