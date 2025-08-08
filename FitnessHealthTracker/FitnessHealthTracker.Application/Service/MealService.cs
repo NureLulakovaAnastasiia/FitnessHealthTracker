@@ -113,7 +113,15 @@ namespace FitnessHealthTracker.Application.Service
             var res = new Result<ICollection<Meal>>();
             try
             {
-                res.Value = await _mealRepository.GetAllMeals();
+                var list = await _mealRepository.GetAllMeals();
+                if (list != null)
+                {
+                    res.Value = list.Where(m => m.UserId == null).ToList();
+                }
+                else
+                {
+                    res.Error = Errors.NoDataFoundMessage;
+                }
             }
             catch (Exception ex)
             {

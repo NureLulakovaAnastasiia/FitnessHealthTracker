@@ -13,7 +13,7 @@ namespace FitnessHealthTracker.Application.DTOs
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
         public DateTime EndDate { get; set; }
         public float? AimValue { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public bool IsAchieved { get; set; } = false;
     }
 }

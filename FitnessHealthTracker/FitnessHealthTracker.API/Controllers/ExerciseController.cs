@@ -4,6 +4,7 @@ using FitnessHealthTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessHealthTracker.API.Controllers
 {
@@ -92,6 +93,14 @@ namespace FitnessHealthTracker.API.Controllers
         [HttpPost("user")]
         public IActionResult AddUserExercise([FromBody] UserExerciseDto exercise)
         {
+            var userId = User.FindFirstValue(ClaimTypes.Sid);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            exercise.UserId = userId;
+
+
             var result = _exerciseService.AddUserExercise(exercise);
             if (result.IsSuccess)
             {
@@ -108,6 +117,13 @@ namespace FitnessHealthTracker.API.Controllers
         [HttpPut("user")]
         public IActionResult UpdateUserExercise([FromBody] UserExerciseDto exercise)
         {
+            var userId = User.FindFirstValue(ClaimTypes.Sid);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            exercise.UserId = userId;
+
             var result = _exerciseService.UpdateUserExercise(exercise);
             if (result.IsSuccess)
             {
@@ -138,9 +154,15 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Список вправ</returns>
 
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetAllUserExercises(string userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetAllUserExercises(string? userId)
         {
+            userId = User.FindFirstValue(ClaimTypes.Sid);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var result = await _exerciseService.GetAllUserExercises(userId);
             if (result.IsSuccess)
             {

@@ -4,6 +4,7 @@ using FitnessHealthTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessHealthTracker.API.Controllers
 {
@@ -40,9 +41,18 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Список страв</returns>
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserMeals(string userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserMeals(string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
+
             var result = await _mealService.GetUserMeals(userId);
             if (result.IsSuccess)
             {
@@ -120,9 +130,18 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Список прийомів їжі</returns>
 
-        [HttpGet("history/{userId}")]
-        public async Task<IActionResult> GetMealsHistory(string userId)
+        [HttpGet("history")]
+        public async Task<IActionResult> GetMealsHistory(string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
+
             var result = await _mealService.GetMealsHistory(userId);
             if (result.IsSuccess)
             {
@@ -139,6 +158,16 @@ namespace FitnessHealthTracker.API.Controllers
         [HttpPost("history")]
         public IActionResult AddMealHistory([FromBody] MealHistoryDto history)
         {
+            if (history.UserId == null)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+                history.UserId = userId;
+            }
+
             var result = _mealService.AddMealHistory(history);
             if (result.IsSuccess)
             {
@@ -155,6 +184,7 @@ namespace FitnessHealthTracker.API.Controllers
         [HttpPut("history")]
         public IActionResult UpdateMealHistory([FromBody] MealHistoryDto history)
         {
+
             var result = _mealService.UpdateMealHistory(history);
             if (result.IsSuccess)
             {

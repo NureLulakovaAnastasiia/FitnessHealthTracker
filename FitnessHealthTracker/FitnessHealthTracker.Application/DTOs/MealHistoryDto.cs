@@ -11,7 +11,7 @@ namespace FitnessHealthTracker.Application.DTOs
     {
         public int Id { get; set; }
         public int MealId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime Date { get; set; }
         public int WeightInGrams { get; set; }
 

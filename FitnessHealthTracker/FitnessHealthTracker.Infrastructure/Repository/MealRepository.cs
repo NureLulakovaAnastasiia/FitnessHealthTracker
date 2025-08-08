@@ -61,7 +61,9 @@ namespace FitnessHealthTracker.Infrastructure.Repository
 
         public async Task<ICollection<Meal>?> GetAllMeals()
         {
-            return await _dbContext.Meals.Where(m => m.UserId == null).ToListAsync();
+            return await _dbContext.Meals
+                .Include(m => m.Nutrients)
+                .ToListAsync();
         }
 
         public async Task<ICollection<MealHistory>?> GetAllUserMealHistory(string userId)

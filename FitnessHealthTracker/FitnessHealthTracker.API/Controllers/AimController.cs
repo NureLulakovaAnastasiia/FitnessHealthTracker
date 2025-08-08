@@ -4,6 +4,7 @@ using FitnessHealthTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessHealthTracker.API.Controllers
 {
@@ -87,9 +88,15 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Результат додавання (true/false)</returns>
 
-        [HttpPost("user")]
+        [HttpPost("user/add")]
         public IActionResult AddUserAim([FromBody] UserAimDto userAim)
         {
+            var userId = User.FindFirstValue(ClaimTypes.Sid);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            userAim.UserId = userId;
             var result = _aimService.AddUserAim(userAim);
             if (result.IsSuccess)
             {
@@ -121,9 +128,15 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Результат оновлення (true/false)</returns>
 
-        [HttpPut("user")]
+        [HttpPut("user/update")]
         public IActionResult UpdateUserAim([FromBody] UserAimDto userAim)
         {
+            var userId = User.FindFirstValue(ClaimTypes.Sid);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            userAim.UserId = userId;
             var result = _aimService.UpdateUserAim(userAim);
             if (result.IsSuccess)
             {
@@ -133,13 +146,21 @@ namespace FitnessHealthTracker.API.Controllers
         }
 
         /// <summary>
-        /// Отримання список всіх цілей користувача
+        /// Отримання списку всіх цілей користувача
         /// </summary>
         /// <returns>Список цілей</returns>
 
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetAllUserAims(string userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetAllUserAims(string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
             var result = await _aimService.GetAllUserAims(userId);
             if (result.IsSuccess)
             {
@@ -169,9 +190,18 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Мета користувача</returns>
 
-        [HttpGet("user/latest/{userId}")]
-        public async Task<IActionResult> GetLatestUserAim(string userId)
+        [HttpGet("user/latest")]
+        public async Task<IActionResult> GetLatestUserAim(string? userId)
         {
+            if (userId == null)
+            {
+                var userClaimId = User.Claims.Where(c => c.Type == ClaimTypes.Sid).FirstOrDefault();
+                if (userClaimId == null)
+                {
+                    return Unauthorized();
+                }
+                userId = userClaimId.Value;
+            }
             var result = await _aimService.GetLatestUserAim(userId);
             if (result.IsSuccess)
             {

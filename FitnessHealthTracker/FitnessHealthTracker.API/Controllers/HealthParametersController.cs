@@ -3,6 +3,7 @@ using FitnessHealthTracker.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessHealthTracker.API.Controllers
 {
@@ -27,6 +28,15 @@ namespace FitnessHealthTracker.API.Controllers
         [HttpPost]
         public IActionResult AddParameter([FromBody] HealthParameter parameter)
         {
+            if (parameter.UserId == null)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+                parameter.UserId = userId;
+            }
             var result = _parameterService.AddParameter(parameter);
             if (result.IsSuccess)
             {
@@ -58,8 +68,16 @@ namespace FitnessHealthTracker.API.Controllers
         /// <returns>Список показників</returns>
 
         [HttpGet("type")]
-        public async Task<IActionResult> GetParametersByType([FromQuery] HealthParameterType type, [FromQuery] string userId)
+        public async Task<IActionResult> GetParametersByType([FromQuery] HealthParameterType type, [FromQuery] string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
             var result = await _parameterService.GetParametersByType(type, userId);
             if (result.IsSuccess)
             {
@@ -77,8 +95,17 @@ namespace FitnessHealthTracker.API.Controllers
         public async Task<IActionResult> GetParametersInTimeInterval(
             [FromQuery] DateTime? start,
             [FromQuery] DateTime? end,
-            [FromQuery] string userId)
+            [FromQuery] string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
+
             var result = await _parameterService.GetParametersInTimeInterval(start, end, userId);
             if (result.IsSuccess)
             {

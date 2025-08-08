@@ -25,9 +25,18 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Параметри користувача</returns>
 
-        [HttpGet("parameters/{userId}")]
-        public async Task<IActionResult> GetUserParameters(string userId)
+        [HttpGet("parameters")]
+        public async Task<IActionResult> GetUserParameters(string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
+
             var parameters = await _userService.GetUserParameters(userId);
             if (parameters.IsSuccess)
             {
@@ -61,9 +70,18 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Дані користувача</returns>
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult>  GetUserData(string userId)
+        [HttpGet("data")]
+        public async Task<IActionResult>  GetUserData(string? userId)
         {
+            if (userId == null)
+            {
+                userId = User.FindFirstValue(ClaimTypes.Sid);
+                if (userId == null)
+                {
+                    return Unauthorized();
+                }
+            }
+
             var userData = await _userService.GetUser(userId);
             if (userData.IsSuccess)
             {
@@ -77,7 +95,7 @@ namespace FitnessHealthTracker.API.Controllers
         /// </summary>
         /// <returns>Результат оновлення (true/false)</returns>
 
-        [HttpPut]
+        [HttpPut("data")]
         public async Task<IActionResult> UpdateUserData([FromBody] GetUserDto userDto)
         {
             if (!ModelState.IsValid)
