@@ -16,14 +16,14 @@ namespace FitnessHealthTracker.Tests.Services
 {
     public class ExerciseServiceTests
     {
-        private readonly Mock<IMealRepository> _exerciseRepoMock;
+        private readonly Mock<IExerciseRepository> _exerciseRepoMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ILogger<ExerciseService>> _loggerMock;
         private readonly ExerciseService _exerciseService;
 
         public ExerciseServiceTests()
         {
-            _exerciseRepoMock = new Mock<IMealRepository>();
+            _exerciseRepoMock = new Mock<IExerciseRepository>();
             _mapperMock = new Mock<IMapper>();
             _loggerMock = new Mock<ILogger<ExerciseService>>();
             _exerciseService = new ExerciseService(_exerciseRepoMock.Object, _mapperMock.Object, _loggerMock.Object);
